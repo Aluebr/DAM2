@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">My Application_compose</string>
+    <string name="playJuegos">Play Juegos</string>
+    <string name="play">Play</string>
+    <string name="newPlayer">New Player</string>
+    <string name="preferences">Preferences</string>
+    <string name="about">About</string>
+    <string name="change">Change</string>
+    <string name="addPlayer">Add a new player</string>
+
+
+</resources>
