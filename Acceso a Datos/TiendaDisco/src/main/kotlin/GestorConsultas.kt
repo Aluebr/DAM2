@@ -112,7 +112,7 @@ class GestorConsultas {
 
         try {
 
-
+            posicionaFichero(0)
             while (stream?.filePointer!! < stream!!.length()) {
 
                 Disco.leeDeFichero(stream)
@@ -196,7 +196,16 @@ class GestorConsultas {
      */
     fun bajaDisco(codigoBuscado: Int): String {
         val posicion = buscaCodigo(codigoBuscado)
-        //IMPLEMENTAR
-        return ""
+        var disco = Disco()
+
+        posicionaFichero(posicion);
+        disco.leeDeFichero(stream)
+
+        disco.cantidad++
+
+        posicionaFichero(posicion)
+
+        disco.escribeEnFichero(stream)
+        return "$disco"
     }
 }

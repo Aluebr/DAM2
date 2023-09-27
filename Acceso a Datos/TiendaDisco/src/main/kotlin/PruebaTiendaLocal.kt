@@ -36,6 +36,7 @@ fun mainMenu(){
                 println("Autores en el catálogo:")
                 for (autor in autores) {
                     println(autor)
+                    println()
                 }
             }
             3 -> {

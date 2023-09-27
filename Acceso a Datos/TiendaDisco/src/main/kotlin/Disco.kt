@@ -118,7 +118,7 @@ class Disco : Serializable {
                 cantidad = stream?.readInt()!!;
 
                 var disco = Disco(codigo, titulo, autor, precio, cantidad)
-                //println(disco)
+
                 println()
 
         }catch (e: EOFException){
