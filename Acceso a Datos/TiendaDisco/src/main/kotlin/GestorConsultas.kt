@@ -62,7 +62,7 @@ class GestorConsultas {
      * @param    codigoBuscado    codigo del disco buscado
      * @return                    byte de inicio del registro en el fichero
      */
-     private fun buscaCodigo(codigoBuscado: Int): Long {
+    private fun buscaCodigo(codigoBuscado: Int): Long {
         try {
             val randomAccessFile = RandomAccessFile("discosDAML.dat", "rw")
             val disco = Disco()
@@ -98,7 +98,7 @@ class GestorConsultas {
             stream!!.seek(posicion)
         } catch (e: IOException) {
             println("Error posicionando el puntero al inicio del fichero")
-            System.exit(0)
+            //System.exit(0)
         }
     }
 
@@ -108,30 +108,27 @@ class GestorConsultas {
      */
     fun listaAutores(): Array<String?> {
         val Disco = Disco()
-        val autores = hashSetOf<String>() // Usamos un conjunto para evitar duplicados
-        //hashArray(autores)
-        try {
-            val randomAccessFile = stream
+        val autores = hashSetOf<String>()
 
-            while (randomAccessFile?.filePointer!! < randomAccessFile.length()) {
-                // Lee un registro completo
-                Disco.codigo = randomAccessFile.readInt()
-                Disco.titulo = randomAccessFile.readUTF()
-                Disco.autor = randomAccessFile.readUTF()
-                Disco.precio = randomAccessFile.readDouble()
-                Disco.cantidad = randomAccessFile.readInt()
+        try {
+
+
+            while (stream?.filePointer!! < stream!!.length()) {
+
+                Disco.leeDeFichero(stream)
+
                 val autor = Disco.autor
                 if (autor != null) {
                     autores.add(autor)
-                } // Agrega el autor al conjunto
+                }
             }
+            posicionaFichero(0)
 
-            randomAccessFile.close()
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
-        // Convierte el conjunto de autores en una lista y la devuelve
+
         return hashArray(autores)
     }
 
@@ -149,10 +146,23 @@ class GestorConsultas {
      * @param    autorBuscado    autor del disco buscado
      * @return                    Vector de cadenas asociadas a los discos del autor
      */
-    /*fun buscaAutor(autorBuscado: String?): Array<String> {
+    fun buscaAutor(autorBuscado: String?): Array<String> {
         val Disco = Disco()
-        //IMPLEMENTAR
-    }*/
+        var discosAutor = mutableListOf<String>();
+        posicionaFichero(0);
+
+        while (stream?.filePointer!! < stream!!.length()) {
+
+            Disco.leeDeFichero(stream)
+            var disco = Disco.titulo;
+            if (disco != null && autorBuscado == Disco.autor) {
+                discosAutor.add(disco)
+            }
+
+        }
+        return discosAutor.toTypedArray();
+
+    }
 
     /**
      * Da de alta un ejemplar del disco con un codigo dado y devuelve una cadena con sus datos
@@ -162,8 +172,21 @@ class GestorConsultas {
      */
     fun altaDisco(codigoBuscado: Int): String {
         val posicion = buscaCodigo(codigoBuscado)
-        //IMPLEMENTAR
-        return ""
+        var disco = Disco()
+
+        posicionaFichero(posicion);
+        disco.leeDeFichero(stream)
+        if (disco.cantidad > 0) {
+            disco.cantidad--
+        } else {
+            return "No hay ejemplares disponibles de este disco."
+        }
+
+        posicionaFichero(posicion)
+
+
+        disco.escribeEnFichero(stream)
+        return "$disco"
     }
 
     /**

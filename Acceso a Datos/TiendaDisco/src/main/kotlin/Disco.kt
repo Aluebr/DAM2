@@ -110,17 +110,17 @@ class Disco : Serializable {
     @Throws(EOFException::class, IOException::class)
     fun leeDeFichero(stream: RandomAccessFile?) {
         try {
-            while (true) {
+
                 codigo = stream?.readInt()!!;
                 titulo = stream?.readUTF()
                 autor = stream?.readUTF()
                 precio = stream?.readDouble()!!;
                 cantidad = stream?.readInt()!!;
 
-                var disco = Disco(codigo, titulo, autor, precio, cantidad).toString()
-                println(disco)
+                var disco = Disco(codigo, titulo, autor, precio, cantidad)
+                //println(disco)
                 println()
-            }
+
         }catch (e: EOFException){
             //
         }

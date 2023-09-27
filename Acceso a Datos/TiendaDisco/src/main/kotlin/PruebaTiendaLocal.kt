@@ -7,10 +7,6 @@ fun main() {
     gestor.stream = RandomAccessFile("discosDAML.dat", "rw")
 
     mainMenu();
-    /*var autores = gestor.listaAutores()
-    for(autor in autores){
-        println(autor)
-    }*/
 
 }
 fun mainMenu(){
@@ -45,15 +41,15 @@ fun mainMenu(){
             3 -> {
                 print("Ingrese el nombre del autor o grupo: ")
                 val nombre = readLine()
-                /*val discos = gestor.buscaAutor(nombre)
+                val discos = gestor.buscaAutor(nombre)
                 if (discos.isNotEmpty()) {
                     println("Discos de $nombre:")
                     for (disco in discos) {
-                        println(disco)
+                        println("$disco \n")
                     }
                 } else {
                     println("No se encontraron discos para $nombre.")
-                }*/
+                }
             }
             4 -> {
                 print("Ingrese el código del disco a comprar: ")
@@ -90,23 +86,8 @@ fun mainMenu(){
     }
 }
 
-    //disco.leeDeFichero(gestor.stream)
-
-    //val f_out = RandomAccessFile("discosDAML.dat", "rw")
-    //val f_in = RandomAccessFile("discosDAML.dat","rw");
-    // Llamar a la función leeDeTeclado para llenar los datos del disco desde el teclado
-    //disco.leeDeTeclado(teclado)
-    // Imprimir los datos del disco
-    //println("Los datos del disco son:")
-    //println(disco.toString())
-    //disco.escribeEnFichero(f_out)
-    // Cierra el Scanner al finalizar
-    //teclado.close()
-    //disco.leeDeFichero(f_in)
 
 
-
-    // Realiza cualquier acción necesaria con los datos leídos
 
 
 
