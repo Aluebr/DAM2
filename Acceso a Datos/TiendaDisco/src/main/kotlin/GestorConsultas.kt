@@ -62,13 +62,13 @@ class GestorConsultas {
      * @param    codigoBuscado    codigo del disco buscado
      * @return                    byte de inicio del registro en el fichero
      */
-     fun buscaCodigo(codigoBuscado: Int): Long {
+     private fun buscaCodigo(codigoBuscado: Int): Long {
         try {
             val randomAccessFile = RandomAccessFile("discosDAML.dat", "rw")
             val disco = Disco()
-
+            var byteInicio: Long = 0
             while (randomAccessFile.filePointer < randomAccessFile.length()) {
-                val byteInicio = randomAccessFile.filePointer // Guarda la posición del inicio del registro
+                byteInicio = randomAccessFile.filePointer // Guarda la posición del inicio del registro
 
                 // Lee un registro completo
                 disco.codigo = randomAccessFile.readInt()
@@ -106,11 +106,35 @@ class GestorConsultas {
      * Devuelve un vector con los autores de discos en el catalog de la tienda
      * @return    Vector de cadenas con los autores
      */
-    /*fun listaAutores(): Array<String> {
+    fun listaAutores(): Array<String?> {
         val Disco = Disco()
-        //IMPLEMENTAR
+        val autores = hashSetOf<String>() // Usamos un conjunto para evitar duplicados
+        //hashArray(autores)
+        try {
+            val randomAccessFile = stream
 
-    }*/
+            while (randomAccessFile?.filePointer!! < randomAccessFile.length()) {
+                // Lee un registro completo
+                Disco.codigo = randomAccessFile.readInt()
+                Disco.titulo = randomAccessFile.readUTF()
+                Disco.autor = randomAccessFile.readUTF()
+                Disco.precio = randomAccessFile.readDouble()
+                Disco.cantidad = randomAccessFile.readInt()
+                val autor = Disco.autor
+                if (autor != null) {
+                    autores.add(autor)
+                } // Agrega el autor al conjunto
+            }
+
+            randomAccessFile.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        // Convierte el conjunto de autores en una lista y la devuelve
+        return hashArray(autores)
+    }
+
 
     private fun hashArray(autores: HashSet<String>): Array<String?> {
         val lista = arrayOfNulls<String>(autores.size)
