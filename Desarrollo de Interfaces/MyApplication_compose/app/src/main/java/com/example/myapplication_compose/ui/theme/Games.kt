@@ -1,5 +1,6 @@
 package com.example.myapplication_compose.ui.theme
 
+import android.webkit.ConsoleMessage
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,10 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.myapplication_compose.CheckInfo
 import com.example.myapplication_compose.R
+
 
 val photoList = listOf(R.drawable.games_angrybirds,R.drawable.games_dragonfly,
     R.drawable.games_hillclimbingracing,R.drawable.games_radiantdefense,
@@ -80,7 +79,10 @@ fun getOptions(titles: List<String>, imagen: List<Int>): List<CheckInfo> {
 
 @Composable
 fun games() {
-
+    var selectedTitles by rememberSaveable { mutableStateOf(emptyList<String>()) }
+    val myOptions = getOptions(listOf("Angry Birds", "Dragon Fly",
+        "Hill Climbing Racing", "Radiant Defense",
+        "Pocket Soccer", "Ninja Jump", "Air Control"), photoList)
     Column(
         modifier = Modifier.fillMaxSize(),
 
@@ -89,9 +91,7 @@ fun games() {
 
         Spacer(modifier = Modifier.size(20.dp))
 
-        val myOptions = getOptions(listOf("Angry Birds", "Dragon Fly",
-            "Hill Climbing Racing", "Radiant Defense",
-            "Pocket Soccer", "Ninja Jump", "Air Control"), photoList)
+
         Column() {
             myOptions.forEach {
                 MyCheckBox(it)
@@ -99,14 +99,22 @@ fun games() {
             }
         }
     }
-    FAB();
+
+    FAB(myOptions) {
+        selectedTitles = myOptions.filter { it.selected }.map { it.title }
+    }
 }
 @Composable
-fun FAB() {
-    val range = 0f..10f
-    val steps = 10
-    var selection by rememberSaveable { mutableStateOf(5f) }
+fun FAB(selectedTitles: List<CheckInfo>, function: () -> Unit) {
 
+    var message = ""
+    for(titles in selectedTitles){
+        if (titles.selected ) {
+             message += titles.title + ", "
+        }
+
+
+    }
     Box(
         modifier = Modifier.fillMaxSize().padding(8.dp)
     ) {
@@ -119,14 +127,19 @@ fun FAB() {
         }
 
         var context = LocalContext.current
+
         FloatingActionButton(
+
             onClick = {
-                var message = if (estadoRadio.isNotEmpty()) {
-                    "Has seleccionado $estadoRadio \n Puntuación: $selection"
+
+                if (message.isNotEmpty()){
+
+                    val messageTitles = "Has seleccionado los siguientes títulos: $message"
+                    Toast.makeText(context, messageTitles.removeSuffix(", "), Toast.LENGTH_LONG).show()
                 } else {
-                    "No has seleccionado nada "
+                    val message = "No has seleccionado ningún título."
+                    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
                 }
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             },
             containerColor = azulOscuro,
             modifier = Modifier

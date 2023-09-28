@@ -36,8 +36,9 @@ fun mainMenu(){
                 println("Autores en el catálogo:")
                 for (autor in autores) {
                     println(autor)
-                    println()
+
                 }
+                println()
             }
             3 -> {
                 print("Ingrese el nombre del autor o grupo: ")

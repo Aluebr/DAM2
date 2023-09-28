@@ -11,9 +11,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.Preferences
 import com.example.myapplication_compose.ui.theme.MyApplication_composeTheme
 import com.example.myapplication_compose.ui.theme.games
-import com.example.myapplication_compose.ui.theme.preferences
+
 import java.util.prefs.Preferences
 
 class MainActivity : ComponentActivity() {
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = "Portada"){
                         composable("Portada"){ Portada(navController)}
                         composable("NewPlayer"){ newPlayer()}
-                        composable("Preferences"){ preferences() }
+                        composable("Preferences"){ Preferences() }
                         composable("Games"){ games() }
                     }
                 }

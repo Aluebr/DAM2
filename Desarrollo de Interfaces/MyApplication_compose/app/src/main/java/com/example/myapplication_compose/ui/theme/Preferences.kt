@@ -1,140 +1,215 @@
-package com.example.myapplication_compose.ui.theme
+package com.example.myapplication
 
-import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.AlertDialogDefaults.containerColor
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalMapOf
-import androidx.compose.ui.platform.InspectableModifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import com.example.myapplication_compose.ui.theme.azulOscuro
 
 @Composable
-fun preferences() {
-    var selection by rememberSaveable { mutableStateOf(50f) }
-    var puntuacion by rememberSaveable { mutableStateOf(0f) }
+fun Preferences() {
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+    var estadoRadio by rememberSaveable { mutableStateOf<String?>(null) }
+    var puntuacion by remember { mutableStateOf(0f) }
+    var currentRating by remember { mutableStateOf(0.0) }
+
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.size(10.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Elige una opción:",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            MyRadioButton(estadoRadio) { selectedOption ->
+                estadoRadio = selectedOption
+            }
+            Slider(puntuacion) { sliderValue ->
+                puntuacion = sliderValue
+            }
+            RatingBar(
+                rating = currentRating,
+                onRatingChanged = { newRating -> currentRating = newRating })
+
+            FilterChips()
+
+        }
+        StartsFab(estadoRadio, currentRating)
+        FloatingActionButton(estadoRadio, puntuacion)
+    }
+}
+
+@Composable
+fun MyRadioButton(estadoRadio: String?, onOptionSelected: (String) -> Unit) {
+    Row() {
+        RadioButton(
+            selected = estadoRadio == "Angry Birds",
+            onClick = { onOptionSelected("Angry Birds") })
         Text(
-            text = "Elige una opción: ",
-            textAlign = TextAlign.Center
+            text = "Angry Birds",
+            Modifier.padding(top = 12.dp)
         )
     }
-
-    myRadioButton();
-
-
-}
-
-@Composable
-fun myRadioButton() {
-    var estadoRadio by rememberSaveable { mutableStateOf("") }
-
-
-    Column(Modifier.fillMaxSize()) {
-        Spacer(modifier = Modifier.size(40.dp))
-
-        Row() {
-            RadioButton(selected = estadoRadio == "Angry Birds", onClick
-            = { estadoRadio = "Angry Birds" })
-            Text(text = "Angry Birds", Modifier.padding(top = 12.dp))
-        }
-        Row {
-            RadioButton(selected = estadoRadio == "Dragon Fly", onClick
-            = { estadoRadio = "Dragon Fly" })
-            Text(text = "Dragon Fly", Modifier.padding(top = 12.dp))
-        }
-        Row {
-
-
-            RadioButton(selected = estadoRadio == "Hill Climbing Racing", onClick
-            = { estadoRadio = "Hill Climbing Racing" })
-            Text(text = "Hill Climbing Racing", Modifier.padding(top = 12.dp))
-        }
-        Row() {
-            RadioButton(selected = estadoRadio == "Pocket Soccer", onClick
-            = { estadoRadio = "Pocket Soccer" })
-            Text(text = "Pocket Soccer", Modifier.padding(top = 12.dp))
-        }
-        Row {
-            RadioButton(selected = estadoRadio == "Radiant Defense", onClick
-            = { estadoRadio = "Radiant Defense" })
-            Text(text = "Radiant Defense", Modifier.padding(top = 12.dp))
-        }
-        Row {
-            RadioButton(selected = estadoRadio == "Ninja Jump", onClick
-            = { estadoRadio = "Ninja Jump" })
-            Text(text = "Ninja Jump", Modifier.padding(top = 12.dp))
-        }
-        Row {
-            RadioButton(selected = estadoRadio == "Air Control", onClick
-            = { estadoRadio = "Air Control" })
-            Text(text = "Air Control", Modifier.padding(top = 12.dp))
-        }
-
-        Row {
-            FABAlwaysBottomRight(estadoRadio)
-        }
-
+    Row() {
+        RadioButton(
+            selected = estadoRadio == "Dragon Fly",
+            onClick = { onOptionSelected("Dragon Fly") }
+        )
+        Text(
+            text = "Dragon Fly",
+            Modifier.padding(top = 12.dp)
+        )
+    }
+    Row() {
+        RadioButton(
+            selected = estadoRadio == "Hill Climbing Racing",
+            onClick = { onOptionSelected("Hill Climbing Racing") })
+        Text(
+            text = "Hill Climbing Racing",
+            Modifier.padding(top = 12.dp)
+        )
+    }
+    Row() {
+        RadioButton(
+            selected = estadoRadio == "Pocket Soccer",
+            onClick = { onOptionSelected("Pocket Soccer") }
+        )
+        Text(
+            text = "Pocket Soccer",
+            Modifier.padding(top = 12.dp)
+        )
+    }
+    Row() {
+        RadioButton(
+            selected = estadoRadio == "Radiant Defense",
+            onClick = { onOptionSelected("Radiant Defense") }
+        )
+        Text(
+            text = "Radiant Defense",
+            Modifier.padding(top = 12.dp)
+        )
+    }
+    Row() {
+        RadioButton(
+            selected = estadoRadio == "Ninja Jump",
+            onClick = { onOptionSelected("Ninja Jump") }
+        )
+        Text(
+            text = "Ninja Jump",
+            Modifier.padding(top = 12.dp)
+        )
+    }
+    Row() {
+        RadioButton(
+            selected = estadoRadio == "Air Control",
+            onClick = { onOptionSelected("Air Control") }
+        )
+        Text(
+            text = "Air Control",
+            Modifier.padding(top = 12.dp)
+        )
     }
 }
+
+@Composable
+fun Slider(puntuacion: Float, onSliderValueChanged: (Float) -> Unit) {
+    val range = 0.0f..10.0f
+    val steps = 10
+    var selection by remember { mutableStateOf(puntuacion) }
+    Slider(
+        value = selection,
+        valueRange = range,
+        steps = steps,
+        onValueChange = {
+            selection = it
+            onSliderValueChanged(it)
+        },
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Composable
+fun FloatingActionButton(estadoRadio: String?, puntuacion: Float) {
+    var context = LocalContext.current
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
+        ExtendedFloatingActionButton(
+            content = {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = "",
+                )
+            },
+            onClick = {
+                if (estadoRadio != null) {
+                    Toast.makeText(
+                        context,
+                        "Has seleccionado $estadoRadio con una puntuación de $puntuacion",
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                } else {
+                    Toast.makeText(context, "No has pulsado ninguna opción", Toast.LENGTH_LONG)
+                        .show()
+                }
+            },
+            containerColor = azulOscuro,
+            modifier = Modifier
+                .size(70.dp)
+                .clip(CircleShape)
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun filterChips() {
+fun FilterChips() {
 
     var estadoRadio2 by rememberSaveable { mutableStateOf<String?>(null) }
 
@@ -173,7 +248,9 @@ fun filterChips() {
                         Icon(
                             imageVector = Icons.Filled.Done,
                             contentDescription = "Done icon",
-                            modifier = Modifier.size(FilterChipDefaults.IconSize).padding(2.dp)
+                            modifier = Modifier
+                                .size(FilterChipDefaults.IconSize)
+                                .padding(2.dp)
                         )
                     }
                 } else {
@@ -197,7 +274,9 @@ fun filterChips() {
                         Icon(
                             imageVector = Icons.Filled.Done,
                             contentDescription = "Done icon",
-                            modifier = Modifier.size(FilterChipDefaults.IconSize).padding(2.dp)
+                            modifier = Modifier
+                                .size(FilterChipDefaults.IconSize)
+                                .padding(2.dp)
                         )
                     }
                 } else {
@@ -221,7 +300,9 @@ fun filterChips() {
                         Icon(
                             imageVector = Icons.Filled.Done,
                             contentDescription = "Done icon",
-                            modifier = Modifier.size(FilterChipDefaults.IconSize).padding(2.dp)
+                            modifier = Modifier
+                                .size(FilterChipDefaults.IconSize)
+                                .padding(2.dp)
                         )
                     }
                 } else {
@@ -245,7 +326,9 @@ fun filterChips() {
                         Icon(
                             imageVector = Icons.Filled.Done,
                             contentDescription = "Done icon",
-                            modifier = Modifier.size(FilterChipDefaults.IconSize).padding(2.dp)
+                            modifier = Modifier
+                                .size(FilterChipDefaults.IconSize)
+                                .padding(2.dp)
                         )
                     }
                 } else {
@@ -269,7 +352,9 @@ fun filterChips() {
                         Icon(
                             imageVector = Icons.Filled.Done,
                             contentDescription = "Done icon",
-                            modifier = Modifier.size(FilterChipDefaults.IconSize).padding(2.dp)
+                            modifier = Modifier
+                                .size(FilterChipDefaults.IconSize)
+                                .padding(2.dp)
                         )
                     }
                 } else {
@@ -279,59 +364,87 @@ fun filterChips() {
         }
     }
 }
+
 @Composable
-fun FABAlwaysBottomRight(estadoRadio: String) {
-    val range = 0f..10f
-    val steps = 10
-    var selection by rememberSaveable { mutableStateOf(5f) }
-
-    Box(
-        modifier = Modifier.fillMaxSize().padding(8.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            Slider(
-                value = selection,
-                valueRange = range,
-                steps = steps,
-                modifier = Modifier.padding(start = 10.dp, end = 10.dp),
-                onValueChange = { selection = it }
+fun RatingBar(
+    modifier: Modifier = Modifier,
+    rating: Double = 0.0,
+    stars: Int = 10,
+    starsColor: Color = Color.Gray,
+    onRatingChanged: (Double) -> Unit
+) {
+    val filledStars = rating.toInt()
+    val halfStar = rating - filledStars >= 0.5f
+    val starColorFilled: Color = Color.Yellow
+    Row(modifier = modifier) {
+        for (i in 0 until filledStars) {
+            Icon(
+                imageVector = Icons.Outlined.Star,
+                contentDescription = null,
+                tint = starColorFilled,
+                modifier = Modifier.clickable {
+                    onRatingChanged(i + 1.0)
+                }
             )
+            Spacer(modifier = Modifier.width(12.dp))
 
-
-            Spacer(modifier = Modifier.height(25.dp))
-            Row {
-                filterChips()
-            }
         }
 
-        var context = LocalContext.current
-        FloatingActionButton(
-            onClick = {
-                var message = if (estadoRadio.isNotEmpty()) {
-                    "Has seleccionado $estadoRadio \n Puntuación: $selection"
-                } else {
-                    "No has seleccionado nada "
-                }
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-            },
-            containerColor = azulOscuro,
-            modifier = Modifier
-                .size(65.dp)
-                .clip(CircleShape)
-                .align(Alignment.BottomEnd)
-                
-        ) {
+        if (halfStar) {
             Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = "Check"
+                imageVector = Icons.Outlined.Star,
+                contentDescription = null,
+                tint = starColorFilled,
+                modifier = Modifier.clickable {
+                    onRatingChanged(filledStars + 0.5)
+                }
             )
+            Spacer(modifier = Modifier.width(10.dp))
+
+        }
+
+        for (i in filledStars + (if (halfStar) 1 else 0) until stars) {
+            Icon(
+                imageVector = Icons.Outlined.Star,
+                contentDescription = null,
+                tint = starsColor,
+                modifier = Modifier.clickable {
+                    onRatingChanged(i + 1.0)
+                }
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+
         }
     }
 }
 
+@Composable
+fun StartsFab(estadoRadio: String?, currentRating: Double) {
+    val context = LocalContext.current
 
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize()
+            .offset(300.dp, 580.dp),
 
+    ) {
+        FloatingActionButton(
+            onClick = {
+                val message = if (estadoRadio != null) {
+                    "Has seleccionado: $estadoRadio con una puntuación de $currentRating estrellas."
+                } else {
+                    "No has seleccionado ningún juego"
+                }
+
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = null,
+                tint = Color.White
+            )
+        }
+    }
+}
