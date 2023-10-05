@@ -2,10 +2,12 @@ package com.example.myapplication_compose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -15,7 +17,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -121,14 +126,12 @@ fun newPlayer() {
 
         }
         Row {
+
             Image(painter = painterResource(id = R.drawable.camera),
                 contentDescription = "Camera",
-                Modifier.size(65.dp))
-            TextField(value = telefono, onValueChange = {telefono = it},label ={Text(text ="Teléfono")},
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = cianBlanco,
-                    focusedIndicatorColor = azulNormal),
-                shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp))
+                Modifier.padding(top = 25.dp, start = 24.dp).size(65.dp))
+
+            MyDropDownMenu()
 
         }
         Row {
@@ -139,9 +142,11 @@ fun newPlayer() {
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = cianBlanco,
                     focusedIndicatorColor = azulNormal)
-                ,shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp))
+                ,shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp)
+            )
 
         }
+        
         Spacer(modifier = Modifier.size(20.dp))
         fun verificarNombre(){
             nombreObligatorio = nombre.isEmpty();
@@ -159,6 +164,52 @@ fun newPlayer() {
                 text = stringResource(id = R.string.addPlayer),
                 textAlign = TextAlign.Center,
             )}
+    }
+    }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyDropDownMenu() {
+    var selectedText by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+    val telefonos =
+        listOf("666111111", "666222222", "666333333", "666444444", "666555555")
 
+    Column(Modifier.padding(20.dp)) {
+        OutlinedTextField(
+            value = selectedText,
+            onValueChange = {
+                selectedText = it
+            },
+            enabled = false,
+            label =  { Text(text = "Teléfono")},
+            readOnly = true,
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = cianBlanco,
+                focusedIndicatorColor = azulNormal),
+            shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
+            modifier = Modifier
+                .clickable { expanded = true }.fillMaxWidth()
+
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+
+        ) {
+            telefonos.forEach { telefono ->
+
+                DropdownMenuItem(
+                    text = { Text(text = telefono)},
+                    onClick = {
+                    expanded = false
+                    selectedText = telefono
+
+                })
+            }
+        }
     }
-    }
+}
+
+
+
+

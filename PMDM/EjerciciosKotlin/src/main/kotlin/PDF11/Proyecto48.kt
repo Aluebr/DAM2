@@ -1,20 +1,17 @@
-package PDF10
+package PDF11
 
 import java.lang.Exception
 
 fun main() {
-
     var sum = 0;
-    var i = 0;
-    do {
+    var j = 0;
+    for (i in 1.. 10){
         var numberInput = askInt()
-        sum += numberInput
-        i++
-
-    }while (numberInput != 0);
-    i--
-    var average = (sum/i)
-    println("Promedio: $average")
+        sum+= numberInput;
+        j++
+    }
+    println("Suma: $sum")
+    println("Promedio: "+ (sum/j).toString())
 }
 
 private fun askInt(): Int {

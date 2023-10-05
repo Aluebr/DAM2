@@ -1,5 +1,7 @@
 package com.example.myapplication_compose
 
+
+import about
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -32,6 +34,7 @@ class MainActivity : ComponentActivity() {
                         composable("NewPlayer"){ newPlayer()}
                         composable("Preferences"){ Preferences() }
                         composable("Games"){ games() }
+                        composable("About"){ about()}
                     }
                 }
             }

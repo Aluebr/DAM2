@@ -1,20 +1,21 @@
-package PDF10
+package PDF11
 
 import java.lang.Exception
 
 fun main() {
+    var greater = 0;
+    var lower = 0;
+    for (i in 1..10){
+        var numberInput = askInt();
+        if(numberInput >= 7){
+            greater++;
+        }else{
+            lower++
+        }
+    }
+    println("Mayor o igual a 7: $greater");
+    println("Menores a 7: $lower");
 
-    var sum = 0;
-    var i = 0;
-    do {
-        var numberInput = askInt()
-        sum += numberInput
-        i++
-
-    }while (numberInput != 0);
-    i--
-    var average = (sum/i)
-    println("Promedio: $average")
 }
 
 private fun askInt(): Int {
